@@ -1,8 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import API from "../services/api";
 import "./TaskForm.css";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const TaskForm = ({ onTaskCreated }) => {
+
+  const token = useSelector((state) => state.auth.token);
+  const navigate = useNavigate()
+
+  useEffect(()=>{
+    if(!token){
+      navigate('/login')
+    }
+  },[token])
+
   const [task, setTask] = useState({
     title: "",
     description: "",

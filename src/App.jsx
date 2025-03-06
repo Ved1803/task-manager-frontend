@@ -26,8 +26,7 @@ function App() {
           element={token ? <TaskList /> : <Navigate to="/login" />}
         />
         <Route path="/create_task" element={<TaskForm/>} />
-        <Route path="/testing" element={<Testing/>} />
-      </Routes>
+        </Routes>
     </>
 
   );

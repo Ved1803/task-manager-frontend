@@ -23,7 +23,7 @@ API.interceptors.request.use(
         console.warn("Token expired, logging out...");
   
         // Dispatch logout action to Redux store
-        await store.dispatch(logoutUser());
+        // await store.dispatch(logoutUser());
   
         // Redirect to login
         window.location.href = "/login";

@@ -26,7 +26,7 @@ const Login = () => {
             password: Yup.string().required("Required"),
           })}
           onSubmit={(values) => {
-            dispatch(loginUser(values)).then(() => navigate("/"));
+            dispatch(loginUser(values)).then(() => navigate("/tasks"));
           }}
         >
           <Form>

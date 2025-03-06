@@ -3,16 +3,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../store/authSlice";
 import { Link } from "react-router-dom";
 import "./Navbar.css"; 
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
 
   const handleLogout = () => {
-    console.log("Logout button clicked!"); // Debug log
-    dispatch(logoutUser())
-      .then((res) => console.log("Logout response:", res))
-      .catch((err) => console.error("Logout error:", err));
+    console.log("Logout button clicked!"); 
+    dispatch(logoutUser());
+    // dispatch(logout());
+    navigate("/login");
+
+    // dispatch(logoutUser())
+    //   .then((res) => console.log("Logout response:", res))
+    //   .catch((err) => console.error("Logout error:", err));
   };
   return (
     <>
@@ -22,9 +28,9 @@ const Navbar = () => {
             <Link to="/">ABC</Link>
           </div>
           <ul className="menu">
-            <li>
-              <Link to="/">Home</Link>
-            </li>
+             <li>
+                <Link to="/">Home</Link>
+              </li>
             {token ? (
               <>
                 <li>

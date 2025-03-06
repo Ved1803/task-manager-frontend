@@ -9,9 +9,21 @@ const TaskList = () => {
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
+  // useEffect(() => {
+  //   API.get("/tasks").then((res) => setTasks(res.data));
+  // }, []);
+
   useEffect(() => {
-    API.get("/tasks").then((res) => setTasks(res.data));
+    API.get("/tasks")
+      .then((res) => {
+        console.log("Tasks Response:", res); // Logs the response data
+        setTasks(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching tasks:", error); // Logs any errors
+      });
   }, []);
+  
 
   const addTask = (newTask) => {
     setTasks([...tasks, newTask]);

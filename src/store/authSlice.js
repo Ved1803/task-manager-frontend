@@ -31,7 +31,7 @@ export const signupUser = createAsyncThunk("auth/signupUser", async (user, { rej
 
 // Async Thunk for Logout
 export const logoutUser = createAsyncThunk("auth/logoutUser", async (_, { rejectWithValue }) => {
-  console.log("Inside logoutUser function..."); // Debugging step
+  console.log("Inside logoutUser function...");
   try {
     const token = localStorage.getItem("token");
     console.log("Token from storage:", token);
@@ -64,7 +64,7 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => { state.loading = true; })
-      .addCase(loginUser.fulfilled, (state, action) => { state.loading = false; state.token = action.payload.token; })
+      .addCase(loginUser.fulfilled, (state, action) => { state.loading = false; state.token = action.payload.status.token; })
       .addCase(loginUser.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
 
       .addCase(signupUser.pending, (state) => { state.loading = true; })
