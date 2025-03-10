@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
 import './Login.css';
 import LoginImage from "./signin.jpg";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -26,8 +27,18 @@ const Login = () => {
             password: Yup.string().required("Required"),
           })}
           onSubmit={(values) => {
-            dispatch(loginUser(values)).then(() => navigate("/tasks"));
-          }}
+            dispatch(loginUser(values))
+              .then((response) => {
+                if (response.error) {
+                  throw new Error(response.error.message || "Login failed!");
+                }
+                toast.success("✅ Login successful!");
+                navigate("/tasks");
+              })
+              .catch((error) => {
+                toast.error(`❌ ${error.message || "Login failed. Please try again."}`);
+              });
+          }}          
         >
           <Form>
             <div className="input-group">

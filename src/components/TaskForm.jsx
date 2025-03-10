@@ -3,6 +3,7 @@ import API from "../services/api";
 import "./TaskForm.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const TaskForm = ({ onTaskCreated }) => {
 
@@ -29,9 +30,11 @@ const TaskForm = ({ onTaskCreated }) => {
     try {
       const response = await API.post("/tasks", task);
       onTaskCreated(response.data.task);
+      toast.success('Task created successfully')
       setTask({ title: "", description: "" });
     } catch (error) {
       console.error("Error creating task:", error);
+      toast.error(error || 'Faild Task creation')
     }
   };
 

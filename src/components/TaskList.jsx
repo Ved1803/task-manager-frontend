@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import API from "../services/api";
 import TaskForm from "./TaskForm";
 import "./TaskList.css"; 
+import { toast } from "react-toastify";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
@@ -36,8 +37,12 @@ const TaskList = () => {
         ));
         setStatusModalOpen(false);
         setSelectedTask(null);
+        toast.success("✅ Update Status successful!");
       })
-      .catch(err => console.error("Failed to update status:", err));
+      .catch((err) => {
+        console.error("Failed to update status:", err)
+        toast.error(err || 'Failed to update status')
+      });
   };
 
   return (

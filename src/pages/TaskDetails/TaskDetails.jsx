@@ -14,7 +14,7 @@ const TaskDetails = () => {
     const fetchTaskDetails = async () => {
       try {
         const response = await API.get(`/tasks/${id}`);
-		console.log(response.data.task, 'dekho')
+		console.log(response.data.task, 'TaskDetails')
         setTask(response.data.task);
       } catch (error) {
         toast.error("Failed to fetch task details!");

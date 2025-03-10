@@ -7,8 +7,9 @@ import Home from "./pages/Home";
 import "./App.css"; 
 import TaskForm from "./components/TaskForm";
 import { useSelector } from "react-redux";
-
-
+import TaskDetails from "./pages/TaskDetails/TaskDetails";
+import { Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 
 function App() {
@@ -26,9 +27,22 @@ function App() {
           element={token ? <TaskList /> : <Navigate to="/login" />}
         />
         <Route path="/create_task" element={<TaskForm/>} />
+        <Route path="/tasks/:id" element={<TaskDetails />} />
         </Routes>
+        <ToastContainer
+          position="top-right"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
     </>
-
   );
 }
 
