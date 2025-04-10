@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import './TaskDetails.css';
+import PriorityDropdown from "./PriorityDropdown";
+import AssigneeDropdown from "./AssigneeDropdown";
 import API from "../../services/api";
+import ReportedByDropdown from "./ReportedByDropdown";
 
 const TaskDetails = () => {
 	const { id } = useParams();
 	const [task, setTask] =  useState(null);
 	const [loading, setLoading] = useState(true);
+	const [allUsers, setAllUsers] = useState([])
 
 
   useEffect(() => {
@@ -26,6 +30,18 @@ const TaskDetails = () => {
     fetchTaskDetails();
   }, [id]);
 
+   const handlePriorityUpdate = (newPriority) => {
+    setTask(prev => ({ ...prev, priority: newPriority }));
+   };
+
+   const handleAssigneeUpdate = (newAssignee) => {
+    setTask(prev => ({ ...prev, assigned_to: newAssignee }));
+   };
+   
+   const handleRepotedByUpdate = (newReportedBy) => {
+    setTask(prev => ({ ...prev, reported_by: newReportedBy }));
+   };
+
 
   if (loading) return <p>Loading task details...</p>;
   if (!task) return <p>Task not found!</p>;
@@ -40,15 +56,28 @@ const TaskDetails = () => {
 			<div className="ticket-meta">
 				<div className="meta-item">
 					<div className="meta-label">Reported By</div>
-					<div className="meta-value">John Smith</div>
+					<ReportedByDropdown
+						taskId={task.id}
+						currentReportedBy={task.reporter.name}
+						onReportedByChange={handleRepotedByUpdate}
+					/>
 				</div>
 				<div className="meta-item">
 					<div className="meta-label">Assigned To</div>
-					<div className="meta-value">Jane Doe</div>
+					<AssigneeDropdown
+						taskId={task.id}
+						currentAssignee={task.assignee.name}
+						onAssigneeChange={handleAssigneeUpdate}
+					/>
 				</div>
+				
 				<div className="meta-item">
-					<div className="meta-label">Priority</div>
-					<div className="meta-value">High</div>
+				    <div className="meta-label">Priority</div>
+					<PriorityDropdown
+						taskId={task.id}
+						currentPriority={task.priority}
+						onPriorityChange={handlePriorityUpdate}
+					/>
 				</div>
 				<div className="meta-item">
 					<div className="meta-label">Created</div>
@@ -56,11 +85,11 @@ const TaskDetails = () => {
 				</div>
 				<div className="meta-item">
 					<div className="meta-label">Due Date</div>
-					<div className="meta-value">March 12, 2025</div>
+					<div className="meta-value">{task.due_date ? task.due_date : "- -"}</div>
 				</div>
 				<div className="meta-item">
 					<div className="meta-label">Category</div>
-					<div className="meta-value">Backend</div>
+					<div className="meta-value">{task.category ? task.category : "- -" }</div>
 				</div>
 			</div>
 
