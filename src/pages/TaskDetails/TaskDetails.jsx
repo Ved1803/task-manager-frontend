@@ -6,6 +6,7 @@ import PriorityDropdown from "./PriorityDropdown";
 import AssigneeDropdown from "./AssigneeDropdown";
 import API from "../../services/api";
 import ReportedByDropdown from "./ReportedByDropdown";
+import TaskComments from "../../components/comments/TaskComments";
 
 const TaskDetails = () => {
 	const { id } = useParams();
@@ -55,27 +56,34 @@ const TaskDetails = () => {
 
 			<div className="ticket-meta">
 				<div className="meta-item">
-					<div className="meta-label">Reported By</div>
+					<div className="meta-label">Reported By
+					  <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+					</div>
 					<ReportedByDropdown
 						taskId={task.id}
-						currentReportedBy={task.reporter.name}
+						currentReportedBy={task.reporter?.name ? task.reporter.name : "- -"}
 						onReportedByChange={handleRepotedByUpdate}
 					/>
 				</div>
 				<div className="meta-item">
-					<div className="meta-label">Assigned To</div>
+					<div className="meta-label">
+					   Assigned To
+					   <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+					</div>
 					<AssigneeDropdown
 						taskId={task.id}
-						currentAssignee={task.assignee.name}
+						currentAssignee={task.assignee?.name ? task.assignee.name : "- -" }
 						onAssigneeChange={handleAssigneeUpdate}
 					/>
 				</div>
 				
 				<div className="meta-item">
-				    <div className="meta-label">Priority</div>
+				    <div className="meta-label">Priority 
+						<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> 
+					</div>
 					<PriorityDropdown
 						taskId={task.id}
-						currentPriority={task.priority}
+						currentPriority={task.priority ? task.priority : "- -"}
 						onPriorityChange={handlePriorityUpdate}
 					/>
 				</div>
@@ -120,36 +128,18 @@ const TaskDetails = () => {
 				</ul>
 			</div>
 
-			<div className="ticket-comments">
-				<h3>Comments (2)</h3>
-				<div className="comment">
-					<div className="comment-header">
-						<span className="comment-author">Jane Doe</span>
-						<span className="comment-time">Today at 10:23 AM</span>
-					</div>
-					<div className="comment-content">
-						<p>I've reviewed the logs and it appears to be an issue with the transaction limit configuration. The payment gateway is rejecting transactions over $500 because we haven't updated our merchant settings after the recent upgrade.</p>
-					</div>
-				</div>
-				<div className="comment">
-					<div className="comment-header">
-						<span className="comment-author">Mike Johnson</span>
-						<span className="comment-time">Today at 11:05 AM</span>
-					</div>
-					<div className="comment-content">
-						<p>I've contacted the payment gateway support team. They confirmed we need to update our API credentials and transaction limits in the merchant portal. I'll have this fixed by end of day.</p>
-					</div>
-				</div>
-			</div>
-
-			<div className="ticket-actions">
-				<button className="action-button primary-button">Add Comment</button>
-				<button className="action-button secondary-button">Assign to Me</button>
-				<button className="action-button secondary-button">Change Status</button>
-			</div>
+			<TaskComments />
 		</div>
 	);
 
 }
 
 export default TaskDetails;
+
+
+
+{/* <div className="ticket-actions">
+	<button className="action-button primary-button">Add Comment</button>
+	<button className="action-button secondary-button">Assign to Me</button>
+	<button className="action-button secondary-button">Change Status</button>
+</div> */}
