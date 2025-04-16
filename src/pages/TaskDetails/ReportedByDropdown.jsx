@@ -18,7 +18,6 @@ const ReportedByDropdown = ({ taskId, currentReportedBy, onReportedByChange }) =
         }));
         setAllUsers(userOptions);
 
-        // Set selected reported by after users are fetched
         if (currentReportedBy) {
           const ReportedUser = userOptions.find(user => user.label === currentReportedBy);
           setSelectedReportedBy(ReportedUser?.label || null);

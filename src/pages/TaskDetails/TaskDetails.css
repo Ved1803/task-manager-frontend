@@ -62,6 +62,24 @@
     margin-bottom: 10px;
 }
 
+.description-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
+
+.input-inline {
+    padding: 4px 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}  
+
 .meta-label {
     font-size: 13px;
     font-weight: 600;
