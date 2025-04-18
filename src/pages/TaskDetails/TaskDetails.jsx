@@ -40,9 +40,10 @@ const TaskDetails = () => {
     try {
       await API.put(`/tasks/${task.id}`, { due_date: newDueDate });
       setTask((prev) => ({ ...prev, due_date: newDueDate }));
-      toast.success("Due date updated!");
+      toast.success( <div style={{ fontSize: "14px" }}>Due date updated!</div>);
     } catch (error) {
-      toast.error("Failed to update due date!");
+		console.log(error)
+      toast.error(<div style={{ fontSize: "14px" }}>Failed to update due date!</div>);
     } finally {
       setEditingDueDate(false);
     }
@@ -57,9 +58,10 @@ const TaskDetails = () => {
     try {
       await API.put(`/tasks/${task.id}`, { category: draftCategory });
       setTask((prev) => ({ ...prev, category: draftCategory }));
-      toast.success("Category updated!");
+      toast.success( <div style={{ fontSize: "14px" }}>Category updated!</div>);
     } catch (error) {
-      toast.error("Failed to update category!");
+      toast.error(<div style={{ fontSize: "14px" }}>Failed to update category!</div>);
+	  console.log(error)
     } finally {
       setEditingCategory(false);
     }
@@ -78,10 +80,10 @@ const TaskDetails = () => {
     try {
       await API.put(`/tasks/${task.id}`, { description: draftDescription });
       setTask((prev) => ({ ...prev, description: draftDescription }));
-      toast.success("Description updated!");
+      toast.success( <div style={{ fontSize: "14px" }}>Description updated!</div>);
     } catch (error) {
-      toast.error("Failed to update description!");
-	  console.log(error, 'Failed to update description!')
+      toast.error(<div style={{ fontSize: "14px" }}>Failed to update description!</div>);
+      console.log(error, 'Failed to update description!');
     } finally {
       setEditingDescription(false);
     }
@@ -278,29 +280,19 @@ const TaskDetails = () => {
       </div>
 
       <div className="ticket-attachments">
-        <h3>Attachments (3)</h3>
+        <h3>Attachments ({task.image_urls.length})</h3>
         <ul className="attachment-list">
-          <li className="attachment-item">
-            <span className="attachment-icon">📄</span>
-            <a href="#" className="attachment-name">
-              error_screenshot.png
-            </a>
-            <span className="attachment-size">245 KB</span>
-          </li>
-          <li className="attachment-item">
-            <span className="attachment-icon">📄</span>
-            <a href="#" className="attachment-name">
-              server_logs.txt
-            </a>
-            <span className="attachment-size">124 KB</span>
-          </li>
-          <li className="attachment-item">
-            <span className="attachment-icon">📄</span>
-            <a href="#" className="attachment-name">
-              transaction_data.json
-            </a>
-            <span className="attachment-size">78 KB</span>
-          </li>
+          {task.image_urls.map((url, index) => (
+            <li className="attachment-item" key={index}>
+              <span className="attachment-icon">📄</span>
+              <img
+                src={url}
+                alt={`Image ${index + 1}`}
+                style={{ width: "200px", marginRight: "10px" }}
+              />
+              <span className="attachment-size">245 KB</span>
+            </li>
+          ))}
         </ul>
       </div>
 

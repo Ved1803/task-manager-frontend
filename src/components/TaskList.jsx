@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import API from "../services/api";
 import TaskForm from "./TaskForm";
-import "./TaskList.css"; 
+import "./TaskList.css";
 import { toast } from "react-toastify";
 
 const TaskList = () => {
@@ -12,8 +12,16 @@ const TaskList = () => {
   const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
-    API.get("/tasks").then((res) => setTasks(res.data));
+    API.get("/tasks")
+      .then((res) => {
+        console.log(res.data);
+        setTasks(res.data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch tasks:", err);
+      });
   }, []);
+  
 
   const addTask = (newTask) => {
     setTasks([...tasks, newTask]);
@@ -23,25 +31,29 @@ const TaskList = () => {
   const openStatusModel = (task) => {
     setSelectedTask(task);
     setStatusModalOpen(true);
-  }
+  };
 
   const updateStatus = (updatedStatus) => {
-    console.log(updatedStatus, 'UPDATED STATUS')
+    console.log(updatedStatus, "UPDATED STATUS");
 
     if (!selectedTask) return;
 
     API.put(`/tasks/${selectedTask.id}`, { status: updatedStatus })
       .then(() => {
-        setTasks(tasks.map(task => 
-          task.id === selectedTask.id ? { ...task, status: updatedStatus } : task
-        ));
+        setTasks(
+          tasks.map((task) =>
+            task.id === selectedTask.id
+              ? { ...task, status: updatedStatus }
+              : task
+          )
+        );
         setStatusModalOpen(false);
         setSelectedTask(null);
-        toast.success("✅ Update Status successful!");
+        toast.success( <div style={{ fontSize: "14px" }}>✅ Update Status successful!</div>);
       })
       .catch((err) => {
-        console.error("Failed to update status:", err)
-        toast.error(err || 'Failed to update status')
+        console.error("Failed to update status:", err);
+        toast.error(err || "Failed to update status");
       });
   };
 
@@ -78,10 +90,24 @@ const TaskList = () => {
             <tr key={task.id}>
               <td>{index + 1}</td>
               <td>{task.id}</td>
-              <td><Link to={`/tasks/${task.id}`}>{task.title}</Link></td>
-              <td>{task.description}</td>
               <td>
-                <span onClick={() => openStatusModel(task)} style={{ cursor: "pointer", color: "black", textDecoration: "underline" }}>
+                <Link to={`/tasks/${task.id}`}>{task.title}</Link>
+              </td>
+              <td>
+                {task.description
+                  ? task.description.split(" ").slice(0, 15).join(" ") +
+                    (task.description.split(" ").length > 15 ? "..." : "")
+                  : "--"}
+              </td>
+              <td>
+                <span
+                  onClick={() => openStatusModel(task)}
+                  style={{
+                    cursor: "pointer",
+                    color: "black",
+                    textDecoration: "underline",
+                  }}
+                >
                   {task.status}
                 </span>
               </td>
@@ -90,11 +116,13 @@ const TaskList = () => {
         </tbody>
       </table>
 
-
       {statusModalOpen && (
         <div className="modal">
           <div className="modal-content">
-            <span className="close-btn" onClick={() => setStatusModalOpen(false)}>
+            <span
+              className="close-btn"
+              onClick={() => setStatusModalOpen(false)}
+            >
               &times;
             </span>
             <h3>Update Status for: {selectedTask?.title}</h3>
@@ -139,7 +167,6 @@ const TaskList = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };

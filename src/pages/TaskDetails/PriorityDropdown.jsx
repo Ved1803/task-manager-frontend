@@ -23,10 +23,10 @@ const PriorityDropdown = ({ taskId, currentPriority, onPriorityChange }) => {
       await API.patch(`/tasks/${taskId}`, { priority: selectedOption.value });
       setSelectedPriority(selectedOption);
       onPriorityChange(selectedOption.value);
-      toast.success("Priority updated successfully!");
+      toast.success(<div style={{ fontSize: "14px" }}>Priority updated successfully!</div>);
       setShowSelect(false);
     } catch (error) {
-      toast.error("Failed to update priority.");
+      toast.error(<div style={{ fontSize: "14px" }}>Failed to update priority. </div>);
     }
   };
 

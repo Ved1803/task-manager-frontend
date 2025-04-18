@@ -42,10 +42,11 @@ const AssigneeDropdown = ({ taskId, currentAssignee, onAssigneeChange }) => {
       });
       setSelectedAssigned(selectedOption.label);
       onAssigneeChange(selectedOption.value);
-      toast.success("Assignee updated successfully!");
+      toast.success(<div style={{ fontSize: "14px" }}>Assignee updated successfully!</div>);
       setShowSelect(false);
     } catch (error) {
-      toast.error("Failed to update assignee.");
+      console.log(error);
+      toast.error(<div style={{ fontSize: "14px" }}>Failed to update assignee.</div>);
     }
   };
 

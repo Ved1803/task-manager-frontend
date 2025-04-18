@@ -36,9 +36,10 @@ const ReportedByDropdown = ({ taskId, currentReportedBy, onReportedByChange }) =
       await API.patch(`/tasks/${taskId}`, { reported_by: selectedOption.value });
       setSelectedReportedBy(selectedOption.label);
       onReportedByChange(selectedOption?.value);
-      toast.success("reported by updated successfully!");
+      toast.success(<div style={{ fontSize: "14px" }}>reported by updated successfully!</div>);
     } catch (error) {
-      toast.error("Failed to update reported by.");
+      console(error)
+      toast.error(<div style={{ fontSize: "14px" }}>Failed to update reported by.</div>);
     }
   };
 
