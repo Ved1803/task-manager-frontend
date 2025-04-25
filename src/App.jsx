@@ -47,6 +47,7 @@ function App() {
           pauseOnHover
           theme="light"
           transition={Bounce}
+          style={{fontSize : "14px"}}
         />
       </div>
     </>

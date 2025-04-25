@@ -12,7 +12,6 @@ const TaskDetails = () => {
   const { id } = useParams();
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [allUsers, setAllUsers] = useState([]);
   const [editingDueDate, setEditingDueDate] = useState(false);
   const [editingCategory, setEditingCategory] = useState(false);
   const [draftCategory, setDraftCategory] = useState("");
@@ -40,10 +39,10 @@ const TaskDetails = () => {
     try {
       await API.put(`/tasks/${task.id}`, { due_date: newDueDate });
       setTask((prev) => ({ ...prev, due_date: newDueDate }));
-      toast.success( <div style={{ fontSize: "14px" }}>Due date updated!</div>);
+      toast.success("Due date updated!");
     } catch (error) {
 		console.log(error)
-      toast.error(<div style={{ fontSize: "14px" }}>Failed to update due date!</div>);
+      toast.error("Failed to update due date!");
     } finally {
       setEditingDueDate(false);
     }
@@ -58,9 +57,9 @@ const TaskDetails = () => {
     try {
       await API.put(`/tasks/${task.id}`, { category: draftCategory });
       setTask((prev) => ({ ...prev, category: draftCategory }));
-      toast.success( <div style={{ fontSize: "14px" }}>Category updated!</div>);
+      toast.success( "Category updated!");
     } catch (error) {
-      toast.error(<div style={{ fontSize: "14px" }}>Failed to update category!</div>);
+      toast.error("Failed to update category!");
 	  console.log(error)
     } finally {
       setEditingCategory(false);
@@ -80,9 +79,9 @@ const TaskDetails = () => {
     try {
       await API.put(`/tasks/${task.id}`, { description: draftDescription });
       setTask((prev) => ({ ...prev, description: draftDescription }));
-      toast.success( <div style={{ fontSize: "14px" }}>Description updated!</div>);
+      toast.success( "Description updated!");
     } catch (error) {
-      toast.error(<div style={{ fontSize: "14px" }}>Failed to update description!</div>);
+      toast.error("Failed to update description!");
       console.log(error, 'Failed to update description!');
     } finally {
       setEditingDescription(false);
@@ -119,7 +118,7 @@ const TaskDetails = () => {
         <div className="meta-item">
           <div className="meta-label">
             Reported By
-            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+            <i className="fa-solid fa-pen-to-square" aria-hidden="true"></i>
           </div>
           <ReportedByDropdown
             taskId={task.id}
@@ -130,7 +129,7 @@ const TaskDetails = () => {
         <div className="meta-item">
           <div className="meta-label">
             Assigned To
-            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+            <i className="fa-solid fa-pen-to-square" aria-hidden="true"></i>
           </div>
           <AssigneeDropdown
             taskId={task.id}
@@ -142,7 +141,7 @@ const TaskDetails = () => {
         <div className="meta-item">
           <div className="meta-label">
             Priority
-            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+            <i className="fa-solid fa-pen-to-square" aria-hidden="true"></i>
           </div>
           <PriorityDropdown
             taskId={task.id}
@@ -214,14 +213,14 @@ const TaskDetails = () => {
                   }}
                   title="Save"
                 >
-                  <i class="fa-solid fa-check"></i>
+                  <i className="fa-solid fa-check"></i>
                 </span>
                 <span
                   onClick={cancelCategoryEdit}
                   style={{ cursor: "pointer", color: "red", marginLeft: "8px" }}
                   title="Cancel"
                 >
-                  <i class="fa-solid fa-xmark"></i>
+                  <i className="fa-solid fa-xmark"></i>
                 </span>
               </>
             ) : (
@@ -263,14 +262,14 @@ const TaskDetails = () => {
                 }}
                 title="Save"
               >
-                <i class="fa-solid fa-check"></i>
+                <i className="fa-solid fa-check"></i>
               </span>
               <span
                 onClick={cancelDescriptionEdit}
                 style={{ cursor: "pointer", color: "red" }}
                 title="Cancel"
               >
-                <i class="fa-solid fa-xmark"></i>
+                <i className="fa-solid fa-xmark"></i>
               </span>
             </div>
           </div>
@@ -280,9 +279,9 @@ const TaskDetails = () => {
       </div>
 
       <div className="ticket-attachments">
-        <h3>Attachments ({task.image_urls.length})</h3>
+        <h3>Attachments ({task.image_urls?.length})</h3>
         <ul className="attachment-list">
-          {task.image_urls.map((url, index) => (
+          {task.image_urls?.map((url, index) => (
             <li className="attachment-item" key={index}>
               <span className="attachment-icon">📄</span>
               <img

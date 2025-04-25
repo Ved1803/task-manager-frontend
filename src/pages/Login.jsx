@@ -4,7 +4,7 @@ import { loginUser } from "../store/authSlice";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
-// import "./Login.css";
+import './Login.css';
 import LoginImage from "./signin.jpg";
 import { toast } from "react-toastify";
 
@@ -32,18 +32,13 @@ const Login = () => {
                 if (response.error) {
                   throw new Error(response.error.message || "Login failed!");
                 }
-                toast.success( 
-                  <div style={{ fontSize: "14px" }}>✅ Login successful!</div>
-                );
-
+                toast.success("✅ Login successful!");
                 navigate("/tasks");
               })
               .catch((error) => {
-                toast.error(<div style={{ fontSize: "14px" }}>
-                  `❌ ${error.message || "Login failed. Please try again."}`
-                  </div>);
+                toast.error(`❌ ${error.message || "Login failed. Please try again."}`);
               });
-          }}
+          }}          
         >
           <Form>
             <div className="input-group">

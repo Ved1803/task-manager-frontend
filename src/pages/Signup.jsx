@@ -33,11 +33,11 @@ const Signup = () => {
                 if (response.error) {
                   throw new error(response.error.message || 'SignUp fail')
                 }
-                toast.success(<div style={{ fontSize: "14px" }}>✅ Sign Up successful!</div>);
+                toast.success("✅ Sign Up successful!");
                 navigate("/login")
             })
             .catch((error)=> {
-              toast.error(<div style={{ fontSize: "14px" }}>`❌ ${error.message || "Sign Up failed. Please try again."}`</div>)
+              toast.error(`❌ ${error.message || "Sign Up failed. Please try again."}`)
             });
           }}
         >

@@ -30,11 +30,11 @@ const TaskForm = ({ onTaskCreated }) => {
     try {
       const response = await API.post("/tasks", task);
       onTaskCreated(response.data.task);
-      toast.success(<div style={{ fontSize: "14px" }}>Task created successfully</div>);
+      toast.success("Task created successfully");
       setTask({ title: "", description: "" });
     } catch (error) {
       console.error("Error creating task:", error);
-      toast.error(<div style={{ fontSize: "14px" }}>Faild Task creation</div>)
+      toast.error("Faild Task creation")
     }
   };
 

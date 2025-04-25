@@ -13,8 +13,10 @@ const TaskComments = () => {
     const fetchTaskComments = async () => {
       try {
         const response = await API.get(`/tasks/${id}/comments`);
+        console.log(response);
         setComments(response.data);
       } catch (error) {
+        console.log(error)
         toast.error("Failed to fetch task comments!");
       } finally {
         setLoading(false);
@@ -25,6 +27,8 @@ const TaskComments = () => {
   }, [id]);
 
   const handleCommentAdded = (newComment) => {
+    console.log(newComment, "bdkbcfkjcadsb");
+    
     setComments((prevComments) => [...prevComments, newComment]);
   };
 
@@ -38,11 +42,11 @@ const TaskComments = () => {
         comments.map((comment) => (
           <div key={comment.id} className="comment">
             <div className="comment-header">
-              <span className="comment-author">{comment.user.name}</span>
-              <span className="comment-time">{comment.created_at}</span>
+              <span className="comment-author">{comment?.user?.name}</span>
+              <span className="comment-time">{comment.created_at || "- -"}</span>
             </div>
             <div className="comment-content">
-              <p>{comment.body}</p>
+              <p>{comment?.body}</p>
             </div>
           </div>
         ))

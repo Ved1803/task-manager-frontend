@@ -49,7 +49,7 @@ const TaskList = () => {
         );
         setStatusModalOpen(false);
         setSelectedTask(null);
-        toast.success( <div style={{ fontSize: "14px" }}>✅ Update Status successful!</div>);
+        toast.success( "✅ Update Status successful!");
       })
       .catch((err) => {
         console.error("Failed to update status:", err);
