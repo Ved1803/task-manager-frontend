@@ -16,6 +16,7 @@ import TaskDetails from "./pages/TaskDetails/TaskDetails";
 import { Bounce, ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 import "react-toastify/dist/ReactToastify.css";
+import UpdateUser from "./pages/users/UpdateUser";
 
 function App() {
   const token = useSelector((state) => state.auth.token);
@@ -34,6 +35,7 @@ function App() {
           />
           <Route path="/create_task" element={<TaskForm />} />
           <Route path="/tasks/:id" element={<TaskDetails />} />
+          <Route path="/users/:id" element={<UpdateUser />} />
         </Routes>
         <ToastContainer
           position="top-right"

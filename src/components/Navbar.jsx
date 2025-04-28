@@ -52,7 +52,7 @@ const Navbar = () => {
     try {
       const response = await API.get("/users/user_current");
       console.log(response.data.avatar_url, "check it");
-      const userOptions = response.data.avatar_url;
+      const userOptions = response.data;
       setCurrentUser(userOptions);
     } catch (error) {
       toast.error("Failed to fetch users");
@@ -86,7 +86,7 @@ const Navbar = () => {
           <div className="user-profile" ref={dropdownRef}>
             {token ? (
               <img
-                src={currentUser}
+                src={currentUser.avatar_url}
                 alt="User"
                 className="user-avatar"
                 onClick={toggleDropdown}
@@ -102,7 +102,7 @@ const Navbar = () => {
               <div className="dropdown-menu">
                 {token ? (
                   <>
-                    <Link to="/profile">Profile</Link>
+                    <Link to={`/users/${currentUser.id}`}>Profile</Link>
                     <button onClick={handleLogout}>Logout</button>
                   </>
                 ) : (
