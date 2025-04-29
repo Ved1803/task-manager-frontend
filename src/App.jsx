@@ -14,7 +14,6 @@ import TaskForm from "./components/TaskForm";
 import { useSelector } from "react-redux";
 import TaskDetails from "./pages/TaskDetails/TaskDetails";
 import { Bounce, ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 import "react-toastify/dist/ReactToastify.css";
 import UpdateUser from "./pages/users/UpdateUser";
 

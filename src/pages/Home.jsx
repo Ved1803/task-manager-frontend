@@ -1,70 +1,88 @@
-
-import './Home.css';
+import "./Home.css";
 const Home = () => {
   return (
-    <div className="home-container">
-      {/* Hero Section */}
-      <section className="hero">
-
-          <h1>Stay Organized, Get More Done!</h1>
-
-        <div>
-        <p>
-          Your ultimate task management tool to create, track, and complete tasks effortlessly.
-          Stay on top of your work with deadlines, priorities, and collaboration features.
-        </p>
-        <div className="buttons">
-          <button className="btn-primary">Get Started for Free</button>
-          <button className="btn-secondary">Login</button>
-        </div>
+    <>
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1>Human Resources Templates for Confluence</h1>
+          <p>
+            Use Confluence to get a head start on your team's projects and docs.
+          </p>
+          <div className="search-bar">
+            <input type="text" placeholder="Search for Confluence templates" />
+          </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="features">
-        <h2>Why Choose Our Task Manager?</h2>
-        <p>
-        <ul>
-          <li>✅ Simple & Fast – Easily create and manage tasks</li>
-          <li>✅ Reminders & Notifications – Stay on top of deadlines</li>
-          <li>✅ Priority & Labels – Organize tasks efficiently</li>
-          <li>✅ Team Collaboration – Assign tasks & work together</li>
-          <li>✅ Progress Tracking – Move tasks through "To-Do," "In Progress," and "Done"</li>
-        </ul>
-        </p>
-      </section>
+      <div className="info-points">
+        <div className="info-item">
+          <span role="img" aria-label="planning">
+            📋
+          </span>
+          <div>
+            <h3>Project Planning</h3>
+            <p>
+              Plan your projects with clear goals, timelines, and deliverables
+              to ensure your team stays on track from start to finish.
+            </p>
+          </div>
+        </div>
 
-      {/* How It Works Section */}
-      <section className="how-it-works">
-        <h2>How It Works</h2>
-      <p>
-        <ol>
-          <li>🔹 Sign Up & Log In – Create your free account</li>
-          <li>🔹 Add Your Tasks – Set due dates, priorities, and categories</li>
-          <li>🔹 Track Progress – Move tasks through different stages</li>
-          <li>🔹 Achieve More! – Stay productive and never miss a deadline</li>
-        </ol>
-       </p>
-      </section>
+        <div className="info-item">
+          <span role="img" aria-label="task">
+            ✅
+          </span>
+          <div>
+            <h3>Task Assignment</h3>
+            <p>
+              Break down projects into tasks and assign them to team members
+              with clear ownership and due dates.
+            </p>
+          </div>
+        </div>
 
-      {/* Testimonials */}
-      <section className="testimonials">
-        <h2>What Users Say</h2>
-        <blockquote>
-          "This task manager has changed how I work! Super easy to use and keeps me on track!"
-        </blockquote>
-        <blockquote>
-          "Finally, a task manager that’s simple yet powerful!"
-        </blockquote>
-      </section>
+        <div className="info-item">
+          <span role="img" aria-label="progress">
+            🔔
+          </span>
+          <div>
+            <h3>Progress Tracking</h3>
+            <p>
+              Monitor project and task status in real-time, ensuring timely
+              updates and proactive management of risks.
+            </p>
+          </div>
+        </div>
 
-      {/* Call to Action */}
-      <section className="cta">
-        <h2>Start Managing Your Tasks Like a Pro!</h2>
-        <button className="btn-primary">Sign Up Free</button>
-        <button className="btn-secondary">Login Now</button>
-      </section>
-    </div>
+        <div className="info-item">
+          <span role="img" aria-label="collaboration">
+            📈
+          </span>
+          <div>
+            <h3>Team Collaboration</h3>
+            <p>
+              Enable seamless collaboration by allowing team members to
+              contribute ideas, share updates, and work together within project
+              pages.
+            </p>
+          </div>
+        </div>
+
+        <div className="info-item">
+          <span role="img" aria-label="documents">
+            🗂️
+          </span>
+          <div>
+            <h3>Documentation Management</h3>
+            <p>
+              Centralize all project-related documents, meeting notes, and key
+              resources so your team can easily access the information they
+              need.
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
