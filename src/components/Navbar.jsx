@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../store/authSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Navbar.css";
 import API from "../services/api";
 
 const Navbar = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
@@ -26,7 +27,7 @@ const Navbar = () => {
     setCurrentUser("");
     dispatch(logoutUser());
     localStorage.removeItem("token");
-    
+
     toast.success("Logout successful!");
     navigate("/login");
   };
@@ -72,14 +73,17 @@ const Navbar = () => {
               <Link to="/">Home</Link>
             </li>
             {token && (
-              <li>
-                <Link to="/tasks">Tasks</Link>
-              </li>
-            )}
-            {token && (
-              <li>
-                <Link to="/create_task">Create Task</Link>
-              </li>
+              <>
+                <li>
+                  <Link to="/projects">Projects</Link>
+                </li>
+                <li>
+                  <Link to="/tasks">Tasks</Link>
+                </li>
+                <li>
+                  <Link to="/create_task">Create Task</Link>
+                </li>
+              </>
             )}
           </ul>
 

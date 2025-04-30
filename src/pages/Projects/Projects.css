@@ -1,0 +1,50 @@
+.project-grid-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 per row */
+  gap: 16px;
+  padding: 20px;
+}
+
+.project-box {
+  background-color: #f0f4ff;
+  border: 1px solid #c2d1ff;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.project-box:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 1%;
+  margin-left: 1%;
+}
+
+.create-button {
+  padding: 10px 16px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.create-button:hover {
+  background-color: #0056b3;
+}
+.project-box-link {
+  text-decoration: none;
+  color: inherit;
+}

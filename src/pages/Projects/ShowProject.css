@@ -1,0 +1,31 @@
+.project-details {
+  padding: 1.5rem;
+}
+
+.project-details h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.project-details ul {
+  padding-left: 1rem;
+  list-style-type: disc;
+}
+
+.project-details {
+  padding: 20px;
+}
+
+.tickets-button {
+  margin-top: 20px;
+  padding: 10px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tickets-button:hover {
+  background-color: #0056b3;
+}

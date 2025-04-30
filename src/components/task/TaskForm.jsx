@@ -1,26 +1,48 @@
-import React, { useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import "./TaskForm.css";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import API from "../../services/api";
 
-const TaskForm = ({ users = [], token }) => {
-  const [formData, setFormData] = useState({
+const TaskForm = ({ onTaskCreated }) => {
+  const token = useSelector((state) => state.auth.token);
+  const navigate = useNavigate();
+
+  const [users, setUsers] = useState([]);
+  const [task, setTask] = useState({
     title: "",
     description: "",
-    status: "pending",
+    status: "",
     reported_by: "",
     assigned_to: "",
-    priority: "low",
+    priority: "",
     due_date: "",
     category: "",
     images: [],
   });
 
+  useEffect(() => {
+    if (!token) navigate("/login");
+
+    const fetchUsers = async () => {
+      try {
+        const res = await API.get("/users");
+        setUsers(res.data);
+      } catch (err) {
+        console.error("Error fetching users", err);
+      }
+    };
+
+    fetchUsers();
+  }, [token, navigate]);
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "images") {
-      setFormData({ ...formData, images: files });
+      setTask({ ...task, images: files });
     } else {
-      setFormData({ ...formData, [name]: value });
+      setTask({ ...task, [name]: value });
     }
   };
 
@@ -28,26 +50,25 @@ const TaskForm = ({ users = [], token }) => {
     e.preventDefault();
     const data = new FormData();
 
-    Object.keys(formData).forEach((key) => {
+    Object.entries(task).forEach(([key, value]) => {
       if (key === "images") {
-        Array.from(formData.images).forEach((img) =>
-          data.append("task[images][]", img)
-        );
-      } else if (formData[key]) {
-        data.append(`task[${key}]`, formData[key]);
+        Array.from(value).forEach((img) => data.append("task[images][]", img));
+      } else {
+        data.append(`task[${key}]`, value);
       }
     });
 
     try {
-      const response = await axios.post("/api/v1/tasks", data, {
+      const response = await API.post("/tasks", data, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
         },
       });
 
-      alert("✅ Task created successfully!");
-      setFormData({
+      onTaskCreated?.(response.data.task);
+      toast.success("Task created successfully");
+
+      setTask({
         title: "",
         description: "",
         status: "pending",
@@ -58,12 +79,9 @@ const TaskForm = ({ users = [], token }) => {
         category: "",
         images: [],
       });
-    } catch (err) {
-      console.error(err);
-      alert(
-        err?.response?.data?.error ||
-          "❌ Something went wrong. Please try again."
-      );
+    } catch (error) {
+      console.error("Error creating task:", error);
+      toast.error("Task creation failed");
     }
   };
 
@@ -73,94 +91,133 @@ const TaskForm = ({ users = [], token }) => {
       onSubmit={handleSubmit}
       encType="multipart/form-data"
     >
-      <h2>Create New Task</h2>
+      <h2>Create Task</h2>
 
-      <label>Title</label>
-      <input
-        type="text"
-        name="title"
-        value={formData.title}
-        onChange={handleChange}
-        required
-      />
+      <div className="form-group">
+        <label htmlFor="title">Title</label>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          value={task.title}
+          onChange={handleChange}
+          placeholder="Task Title"
+          required
+        />
+      </div>
 
-      <label>Description</label>
-      <textarea
-        name="description"
-        value={formData.description}
-        onChange={handleChange}
-        rows="3"
-        required
-      />
+      <div className="form-group">
+        <label htmlFor="description">Description</label>
+        <textarea
+          name="description"
+          id="description"
+          value={task.description}
+          onChange={handleChange}
+          placeholder="Task Description"
+          required
+        />
+      </div>
 
       <label>Status</label>
-      <select name="status" value={formData.status} onChange={handleChange}>
+      <select
+        name="status"
+        value={task.status}
+        onChange={handleChange}
+        required
+      >
+        <option value="" disabled>
+          Select Status
+        </option>
         <option value="pending">Pending</option>
-        <option value="done">Done</option>
         <option value="todo">To Do</option>
         <option value="in_progress">In Progress</option>
+        <option value="done">Done</option>
       </select>
 
       <label>Priority</label>
-      <select name="priority" value={formData.priority} onChange={handleChange}>
+      <select
+        name="priority"
+        value={task.priority}
+        onChange={handleChange}
+        required
+      >
+        <option value="" disabled>
+          Select Priority
+        </option>
         <option value="low">Low</option>
         <option value="medium">Medium</option>
         <option value="high">High</option>
         <option value="critical">Critical</option>
       </select>
 
-      <label>Due Date</label>
-      <input
-        type="date"
-        name="due_date"
-        value={formData.due_date}
-        onChange={handleChange}
-      />
+      <div className="form-group">
+        <label htmlFor="due_date">Due Date</label>
+        <input
+          type="date"
+          name="due_date"
+          id="due_date"
+          value={task.due_date}
+          onChange={handleChange}
+        />
+      </div>
 
-      <label>Category</label>
-      <input
-        type="text"
-        name="category"
-        value={formData.category}
-        onChange={handleChange}
-      />
+      <div className="form-group">
+        <label htmlFor="category">Category</label>
+        <input
+          type="text"
+          name="category"
+          id="category"
+          value={task.category}
+          onChange={handleChange}
+          placeholder="Category"
+        />
+      </div>
 
-      <label>Reported By</label>
-      <select
-        name="reported_by"
-        value={formData.reported_by}
-        onChange={handleChange}
-      >
-        <option value="">Select Reporter</option>
-        {users.map((user) => (
-          <option key={user.id} value={user.id}>
-            {user.name} ({user.email})
-          </option>
-        ))}
-      </select>
+      <div className="form-group">
+        <label htmlFor="reported_by">Reported By</label>
+        <select
+          name="reported_by"
+          id="reported_by"
+          value={task.reported_by}
+          onChange={handleChange}
+        >
+          <option value="">Select User</option>
+          {users?.map((user) => (
+            <option key={user.id} value={user.id}>
+              {user.name} ({user.email})
+            </option>
+          ))}
+        </select>
+      </div>
 
-      <label>Assigned To</label>
-      <select
-        name="assigned_to"
-        value={formData.assigned_to}
-        onChange={handleChange}
-      >
-        <option value="">Select Assignee</option>
-        {users.map((user) => (
-          <option key={user.id} value={user.id}>
-            {user.name} ({user.email})
-          </option>
-        ))}
-      </select>
+      <div className="form-group">
+        <label htmlFor="assigned_to">Assign To</label>
+        <select
+          name="assigned_to"
+          id="assigned_to"
+          value={task.assigned_to}
+          onChange={handleChange}
+        >
+          <option value="">Select User</option>
+          {users?.map((user) => (
+            <option key={user.id} value={user.id}>
+              {user.name} ({user.email})
+            </option>
+          ))}
+        </select>
+      </div>
 
-      <label>Attach Images</label>
-      <input
-        type="file"
-        name="images"
-        multiple
-        accept="image/*"
-        onChange={handleChange}
-      />
+      <div className="form-group">
+        <label htmlFor="images">Upload Images</label>
+        <input
+          type="file"
+          name="images"
+          id="images"
+          multiple
+          accept="image/*"
+          onChange={handleChange}
+        />
+      </div>
 
       <button type="submit">Create Task</button>
     </form>

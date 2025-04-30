@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import API from "../services/api";
-import TaskForm from "./TaskForm";
+import API from "../../services/api";
 import "./TaskList.css";
 import { toast } from "react-toastify";
+import TaskForm from "./TaskForm";
+import TaskTable from "./TaskTable";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
@@ -21,7 +22,6 @@ const TaskList = () => {
         console.error("Failed to fetch tasks:", err);
       });
   }, []);
-  
 
   const addTask = (newTask) => {
     setTasks([...tasks, newTask]);
@@ -49,7 +49,7 @@ const TaskList = () => {
         );
         setStatusModalOpen(false);
         setSelectedTask(null);
-        toast.success( "✅ Update Status successful!");
+        toast.success("✅ Update Status successful!");
       })
       .catch((err) => {
         console.error("Failed to update status:", err);
@@ -75,46 +75,7 @@ const TaskList = () => {
         </div>
       )}
 
-      <table>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Key</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks.map((task, index) => (
-            <tr key={task.id}>
-              <td>{index + 1}</td>
-              <td>{task.id}</td>
-              <td>
-                <Link to={`/tasks/${task.id}`}>{task.title}</Link>
-              </td>
-              <td>
-                {task.description
-                  ? task.description.split(" ").slice(0, 15).join(" ") +
-                    (task.description.split(" ").length > 15 ? "..." : "")
-                  : "--"}
-              </td>
-              <td>
-                <span
-                  onClick={() => openStatusModel(task)}
-                  style={{
-                    cursor: "pointer",
-                    color: "black",
-                    textDecoration: "underline",
-                  }}
-                >
-                  {task.status}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TaskTable tasks={tasks} openStatusModel={openStatusModel} />
 
       {statusModalOpen && (
         <div className="modal">
