@@ -28,8 +28,7 @@ const ShowProject = () => {
 
   const goToTicketsDashboard = () => {
     navigate(`/projects/${id}/tasks`, {
-      state: { tasks: tasks },
-    });
+      state: { projectId: id, tasks: tasks },    });
   };
 
   if (!project) return <p>Loading...</p>;

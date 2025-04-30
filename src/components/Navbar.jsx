@@ -80,9 +80,6 @@ const Navbar = () => {
                 <li>
                   <Link to="/tasks">Tasks</Link>
                 </li>
-                <li>
-                  <Link to="/create_task">Create Task</Link>
-                </li>
               </>
             )}
           </ul>

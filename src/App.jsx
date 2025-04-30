@@ -40,7 +40,7 @@ function App() {
           <Route path="/projects/new" element={<CreateProjectForm />} />
           <Route path="/projects/:id" element={<ShowProject />} />
           <Route path="/projects/:id/tasks" element={<Tasks />} />
-          <Route path="/create_task" element={<TaskForm />} />
+          <Route path="/projects/:id/tasks/new" element={<TaskForm />} />
           <Route path="/tasks/:id" element={<TaskDetails />} />
           <Route path="/users/:id" element={<UpdateUser />} />
         </Routes>

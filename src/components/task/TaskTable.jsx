@@ -1,13 +1,28 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation} from "react-router-dom";
 import "./TaskList.css";
 
-const TaskTable = ({ tasks }) => {
+
+const TaskTable = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { projectId, tasks } = location.state || {};
+
   if (!tasks || tasks.length === 0) {
     return <p>No tasks available.</p>;
   }
 
+  const goToTicketsDashboard = () => {
+    navigate(`/projects/${projectId}/tasks/new`, {
+      state: { projectId },
+    });
+  };
+
   return (
+    <>
+  <button onClick={goToTicketsDashboard} className="tickets-button">
+    Create New Task
+  </button>
     <table>
       <thead>
         <tr>
@@ -33,21 +48,13 @@ const TaskTable = ({ tasks }) => {
                 : "--"}
             </td>
             <td>
-              {/* <span
-                onClick={() => openStatusModel(task)}
-                style={{
-                  cursor: "pointer",
-                  color: "black",
-                  textDecoration: "underline",
-                }}
-              > */}
               {task.status}
-              {/* </span> */}
             </td>
           </tr>
         ))}
       </tbody>
     </table>
+    </>
   );
 };
 

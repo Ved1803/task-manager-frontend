@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import "./TaskForm.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, useParams} from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import API from "../../services/api";
 
 const TaskForm = ({ onTaskCreated }) => {
+  const location = useLocation();
+  const { projectId: paramProjectId } = useParams();
+  const { projectId: stateProjectId } = location.state || {};
+  const projectId = stateProjectId || paramProjectId;
+
   const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
 
@@ -49,7 +54,7 @@ const TaskForm = ({ onTaskCreated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
-
+   
     Object.entries(task).forEach(([key, value]) => {
       if (key === "images") {
         Array.from(value).forEach((img) => data.append("task[images][]", img));
@@ -58,8 +63,10 @@ const TaskForm = ({ onTaskCreated }) => {
       }
     });
 
+    data.append("task[project_id]", projectId);
+
     try {
-      const response = await API.post("/tasks", data, {
+      const response = await API.post(`projects/:${projectId}/tasks`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -67,6 +74,7 @@ const TaskForm = ({ onTaskCreated }) => {
 
       onTaskCreated?.(response.data.task);
       toast.success("Task created successfully");
+      navigate(`/projects/${projectId}`);
 
       setTask({
         title: "",
