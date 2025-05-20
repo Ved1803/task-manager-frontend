@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Home.css";
 const Home = () => {
   return (
@@ -16,6 +17,7 @@ const Home = () => {
 
       <div className="info-points">
         <div className="info-item">
+          <Link to="https://www.techtarget.com/searchcio/definition/project-planning" >
           <span role="img" aria-label="planning">
             📋
           </span>
@@ -26,6 +28,7 @@ const Home = () => {
               to ensure your team stays on track from start to finish.
             </p>
           </div>
+          </Link>
         </div>
 
         <div className="info-item">
