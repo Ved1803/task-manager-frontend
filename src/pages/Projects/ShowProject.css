@@ -1,31 +1,257 @@
-.project-details {
-  padding: 1.5rem;
+.project-page {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.project-details h2 {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+.header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.project-details ul {
-  padding-left: 1rem;
-  list-style-type: disc;
+.project-title {
+  font-size: 32px;
+  font-weight: 700;
 }
 
-.project-details {
-  padding: 20px;
+.header-actions {
+  display: flex;
+  gap: 12px;
 }
 
-.tickets-button {
-  margin-top: 20px;
-  padding: 10px 16px;
-  background-color: #007bff;
-  color: white;
+.invite-btn,
+.dashboard-btn {
+  padding: 10px 18px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-weight: bold;
   cursor: pointer;
 }
 
-.tickets-button:hover {
-  background-color: #0056b3;
+.invite-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.dashboard-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.description {
+  font-size: 18px;
+  color: #444;
+  margin-bottom: 25px;
+  background-color: #f8f9fb;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.detail-card {
+  background-color: #f8f9fb;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.detail-card h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: #666;
+}
+
+.detail-card p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.stats-section {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-box {
+  flex: 1;
+  background-color: #eef5ff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.stat-box h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: #444;
+}
+
+.stat-box p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+}
+
+.members-section {
+  margin-bottom: 30px;
+}
+
+.member-label {
+  margin-bottom: 10px;
+  color: #666;
+}
+
+.avatars {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: -10px;
+  border: 2px solid #fff;
+  cursor: pointer;
+}
+
+.total-users {
+  margin-left: 15px;
+  font-weight: 600;
+  color: #555;
+}
+
+.progress-section {
+  margin: 30px 0;
+}
+
+.progress-label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 18px;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #28a745;
+  transition: width 0.3s ease-in-out;
+}
+
+.milestones-section {
+  margin-bottom: 30px;
+}
+
+.milestone-list {
+  list-style: none;
+  padding-left: 0;
+  font-size: 16px;
+  color: #444;
+}
+
+.activity-feed {
+  margin-bottom: 20px;
+}
+
+.activity-feed ul {
+  list-style: none;
+  padding-left: 0;
+  font-size: 15px;
+  color: #555;
+}
+
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .invite-btn, .dashboard-btn {
+    width: 100%;
+  }
+
+  .stats-section {
+    flex-direction: column;
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  width: 500px;
+  max-height: 80vh;
+  border-radius: 12px;
+  overflow-y: auto;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin: 12px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.user-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.user-item {
+  margin: 8px 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
 }
