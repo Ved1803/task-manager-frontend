@@ -36,6 +36,7 @@ const ShowProject = () => {
   const [search, setSearch] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectedRole, setSelectedRole] = useState("member");
+  const [teamMembers, setTeamMembers] = useState([]); //assignedUsers
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -45,6 +46,7 @@ const ShowProject = () => {
         setProject(res.data.project);
         console.log(res.data);
         setTasks(res.data.project.tasks);
+        setTeamMembers(res.data.project.assignedUsers);
       } catch (err) {
         console.error("Failed to fetch project", err);
       }
@@ -95,13 +97,6 @@ const ShowProject = () => {
   };
 
   if (!project) return <div className="premium-bg project-bg"><div className="project-glass-card loading">Loading...</div></div>;
-
-  // Placeholder team members
-  const teamAvatars = [
-    { id: 1, name: "Ved Tiwari", img: "https://i.pravatar.cc/40?img=11" },
-    { id: 2, name: "John Doe", img: "https://i.pravatar.cc/40?img=12" },
-    { id: 3, name: "Jane Smith", img: "https://i.pravatar.cc/40?img=13" },
-  ];
 
   // Progress calculation (placeholder)
   const progress = 30;
@@ -169,10 +164,10 @@ const ShowProject = () => {
             <button className="team-modal-btn" onClick={() => setShowTeamModal(true)} title="View all team members">👥</button>
           </div>
           <div className="avatars">
-            {teamAvatars.map((member) => (
+            {teamMembers.slice(0, 5).map((member) => (
               <img
                 key={member.id}
-                src={member.img}
+                src={member.avatar_url || `https://i.pravatar.cc/40?img=${member.id+10}`}
                 alt={member.name}
                 className="avatar"
                 title={member.name}
@@ -181,7 +176,11 @@ const ShowProject = () => {
                 style={{ transition: 'transform 0.15s' }}
               />
             ))}
-            <span className="total-users" onClick={() => setShowTeamModal(true)} tabIndex={0}>+5 more</span>
+            {teamMembers.length > 5 && (
+              <span className="total-users" onClick={() => setShowTeamModal(true)} tabIndex={0}>
+                +{teamMembers.length - 5} more
+              </span>
+            )}
           </div>
         </div>
         {/* Progress Bar */}
@@ -239,20 +238,22 @@ const ShowProject = () => {
             </div>
             
             <div className="modal-user-list">
-              {filteredUsers.map((user) => (
-                <div key={user.id} className="modal-user-item" onClick={() => console.log('View profile:', user.name)}>
-                  <div className="user-avatar">
-                    <img src={`https://i.pravatar.cc/40?img=${user.id+10}`} alt={user.name} />
+              {teamMembers
+                .filter((user) => user?.name?.toLowerCase().includes(search.toLowerCase()))
+                .map((user) => (
+                  <div key={user.id} className="modal-user-item" onClick={() => console.log('View profile:', user.name)}>
+                    <div className="user-avatar">
+                      <img src={user.avatar_url || `https://i.pravatar.cc/40?img=${user.id+10}`} alt={user.name} />
+                    </div>
+                    <div className="user-info">
+                      <span className="user-name">{user.name}</span>
+                      <span className="user-role">Team Member</span>
+                    </div>
+                    <div className="user-actions">
+                      <button className="view-profile-btn" title="View Profile">👁️</button>
+                    </div>
                   </div>
-                  <div className="user-info">
-                    <span className="user-name">{user.name}</span>
-                    <span className="user-role">Team Member</span>
-                  </div>
-                  <div className="user-actions">
-                    <button className="view-profile-btn" title="View Profile">👁️</button>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
             
             <div className="modal-footer">
