@@ -1,12 +1,12 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import TaskTable from "../../components/task/TaskTable";
+import KanbanBoard from "../../components/task/KanbanBoard";
 
 const Tasks = () => {
   const location = useLocation();
-  const { tasks } = location.state || {};
+  const { projectId } = location.state || {};
 
-  return <TaskTable tasks={tasks} />;
+  return <KanbanBoard />;
 };
 
 export default Tasks;
