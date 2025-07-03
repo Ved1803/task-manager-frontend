@@ -36,23 +36,27 @@ const TaskComments = () => {
 
   return (
     <div className="ticket-comments">
-      <h3>Comments ({comments.length})</h3>
       <CreateComments taskId={id} onCommentAdded={handleCommentAdded} />
-      {comments.length > 0 ? (
-        comments.map((comment) => (
-          <div key={comment.id} className="comment">
-            <div className="comment-header">
-              <span className="comment-author">{comment?.user?.name}</span>
-              <span className="comment-time">{comment.created_at || "- -"}</span>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: 8 }}>
+        {comments.length > 0 ? (
+          comments.map((comment) => (
+            <div
+              key={comment.id}
+              className="jira-comment-box"
+            >
+              <p style={{ fontWeight: 600, marginBottom: 2 }}>
+                {comment?.user?.name || 'Unknown'}
+                <span style={{ fontWeight: 400, fontSize: '0.85em', color: '#b6bac8', marginLeft: 10 }}>
+                  {comment.created_at || '- -'}
+                </span>
+              </p>
+              <p style={{ fontSize: '1rem', marginTop: 4 }}>{comment?.body}</p>
             </div>
-            <div className="comment-content">
-              <p>{comment?.body}</p>
-            </div>
-          </div>
-        ))
-      ) : (
-        <p>No comments available.</p>
-      )}
+          ))
+        ) : (
+          <p style={{ color: '#b6bac8', margin: 0 }}>No comments available.</p>
+        )}
+      </div>
     </div>
   );
 };

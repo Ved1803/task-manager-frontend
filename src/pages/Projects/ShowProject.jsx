@@ -153,8 +153,8 @@ const ShowProject = () => {
             <p>{project.inProgressTasks}</p>
           </div>
           <div className="stat-box">
-            <h4>Pending</h4>
-            <p>{project.pendingTasks}</p>
+            <h4>Reviwe</h4>
+            <p>{project.reviewTasks}</p>
           </div>
         </div>
         {/* Team Members */}

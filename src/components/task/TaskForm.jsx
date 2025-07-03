@@ -79,7 +79,7 @@ const TaskForm = ({ onTaskCreated }) => {
       setTask({
         title: "",
         description: "",
-        status: "pending",
+        status: "todo",
         reported_by: "",
         assigned_to: "",
         priority: "low",
@@ -136,7 +136,7 @@ const TaskForm = ({ onTaskCreated }) => {
         <option value="" disabled>
           Select Status
         </option>
-        <option value="pending">Pending</option>
+        <option value="review">review</option>
         <option value="todo">To Do</option>
         <option value="in_progress">In Progress</option>
         <option value="done">Done</option>

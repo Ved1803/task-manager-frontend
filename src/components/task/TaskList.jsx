@@ -68,11 +68,11 @@ const TaskList = () => {
     //           <label>
     //             <input
     //               type="radio"
-    //               value="pending"
-    //               checked={selectedTask.status === "pending"}
+    //               value="review"
+    //               checked={selectedTask.status === "review"}
     //               onChange={(e) => updateStatus(e.target.value)}
     //             />
-    //             Pending
+    //             review
     //           </label>
     //           <label>
     //             <input
