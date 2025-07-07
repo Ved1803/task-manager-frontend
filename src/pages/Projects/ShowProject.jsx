@@ -80,6 +80,19 @@ const ShowProject = () => {
   };
 
   const handleInvite = async () => {
+    if (selectedUsers.length === 0) return;
+    try {
+      await API.put(`/projects/${id}/assign_users`, {
+        user_ids: selectedUsers,
+        role: selectedRole,
+      });
+      // Optionally, refresh team members
+      const res = await API.get(`/projects/${id}`);
+      setTeamMembers(res.data.project.assignedUsers);
+    } catch (error) {
+      console.error("Failed to invite users:", error);
+      // Optionally, show an error message to the user
+    }
     setShowInviteModal(false);
     setSelectedUsers([]);
     setSelectedRole("member");
@@ -123,19 +136,20 @@ const ShowProject = () => {
         <div className="details-grid">
           <div className="detail-card">
             <h4>Start Date</h4>
-            <p>{project.created_at}</p>
+            <p>{project.start_date}</p>
           </div>
           <div className="detail-card">
-            <h4>Deadline</h4>
-            <p>July 15, 2025</p>
+            <h4>End Date</h4>
+            <p>{project.end_date}</p>
           </div>
+
           <div className="detail-card">
             <h4>Priority</h4>
-            <p>High</p>
+            <p>{project.priority}</p>
           </div>
           <div className="detail-card">
             <h4>Client</h4>
-            <p>Acme Corp</p>
+            <p>{project.client_name}</p>
           </div>
         </div>
         {/* Quick Stats */}
