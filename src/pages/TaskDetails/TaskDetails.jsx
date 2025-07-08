@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./TaskDetails.css";
 import PriorityDropdown from "./PriorityDropdown";
+import StatusDropdown from "./StatusDropdown";
 import AssigneeDropdown from "./AssigneeDropdown";
 import API from "../../services/api";
 import ReportedByDropdown from "./ReportedByDropdown";
@@ -259,26 +260,15 @@ const TaskDetails = () => {
           <div className="jira-card jira-info-card">
             <div className="jira-info-row"><span className="jira-info-label">Ticket Key</span><span className="jira-info-value">Ticket-{task.id}</span></div>
             <div className="jira-info-row"><span className="jira-info-label">Status</span><span>{editingStatus ? (
-              <select
-                value={task.status}
-                onChange={e => handleStatusChange(e.target.value)}
-                className="input-inline"
-                autoFocus
-                onBlur={() => setEditingStatus(false)}
-              >
-                <option value="To Do">To Do</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Review">Review</option>
-                <option value="Done">Done</option>
-              </select>
+              <StatusDropdown taskId={task.id} currentStatus={task.priority} onStatusChange={handleStatusChange} />
             ) : (
               <span style={{ cursor: 'pointer' }} onClick={() => setEditingStatus(true)}>
                 {renderStatusBadge(task.status)}
                 <span title="Edit" style={{ marginLeft: 6, fontSize: '1em', color: '#b6bac8', cursor: 'pointer' }}>✏️</span>
               </span>
             )}</span></div>
-            <div className="jira-info-row"><span className="jira-info-label">Type</span><span>{task.type || 'Story'}</span></div>
-            <div className="jira-info-row"><span className="jira-info-label">Priority</span><span>{editingPriority ? (
+            <div className="jira-info-row"><span className="jira-info-label">Type</span><span className="task-value-inline">{task.type || 'Story'}</span></div>
+            <div className="jira-info-row"><span className="jira-info-label">Priority</span><span className="task-value-inline">{editingPriority ? (
               <PriorityDropdown taskId={task.id} currentPriority={task.priority} onPriorityChange={handlePriorityChange} />
             ) : (
               <span style={{ cursor: 'pointer' }} onClick={() => setEditingPriority(true)}>
@@ -287,14 +277,14 @@ const TaskDetails = () => {
               </span>
             )}</span></div>
             <div className="jira-info-row"><span className="jira-info-label">Labels</span>{renderLabels(task.labels)}</div>
-            <div className="jira-info-row"><span className="jira-info-label">Sprint</span><span>{task.sprint || '-'}</span></div>
-            <div className="jira-info-row"><span className="jira-info-label">Story Points</span><span>{task.story_points || '-'}</span></div>
-            <div className="jira-info-row"><span className="jira-info-label">Epic Link</span><span>{task.epic_link || '-'}</span></div>
-            <div className="jira-info-row"><span className="jira-info-label">Parent Link</span><span>{task.parent_link || '-'}</span></div>
-            <div className="jira-info-row"><span className="jira-info-label">Acceptance Criteria</span><span>{task.acceptance_criteria || '-'}</span></div>
-            <div className="jira-info-row"><span className="jira-info-label">Created</span><span>{task.created_at || '-'}</span></div>
+            <div className="jira-info-row"><span className="jira-info-label">Sprint</span><span className="task-value-inline">{task.sprint || '-'}</span></div>
+            <div className="jira-info-row"><span className="jira-info-label">Story Points</span><span className="task-value-inline">{task.story_points || '-'}</span></div>
+            <div className="jira-info-row"><span className="jira-info-label">Epic Link</span><span className="task-value-inline">{task.epic_link || '-'}</span></div>
+            <div className="jira-info-row"><span className="jira-info-label">Parent Link</span><span className="task-value-inline">{task.parent_link || '-'}</span></div>
+            <div className="jira-info-row"><span className="jira-info-label">Acceptance Criteria</span><span className="task-value-inline">{task.acceptance_criteria || '-'}</span></div>
+            <div className="jira-info-row"><span className="jira-info-label">Created</span><span className="task-value-inline">{task.created_at || '-'}</span></div>
             <div className="jira-info-row"><span className="jira-info-label">Due Date</span>
-              <span>
+              <span className="task-value-inline">
                 {editingDueDate ? (
                   <input
                     type="date"
@@ -329,9 +319,9 @@ const TaskDetails = () => {
                 <span title="Edit" style={{ marginLeft: 6, fontSize: '1em', color: '#b6bac8', cursor: 'pointer' }}>✏️</span>
               </span>
             )}</span></div>
-            <div className="jira-people-row"><span className="jira-info-label">Team</span><span>{task.team || '-'}</span></div>
-            <div className="jira-people-row"><span className="jira-info-label">Votes</span><span>{task.votes || 0}</span></div>
-            <div className="jira-people-row"><span className="jira-info-label">Watchers</span><span>{task.watchers || 0}</span></div>
+            <div className="jira-people-row"><span className="jira-info-label">Team</span><span className="task-value-inline">{task.team || '-'}</span></div>
+            <div className="jira-people-row"><span className="jira-info-label">Votes</span><span className="task-value-inline">{task.votes || 0}</span></div>
+            <div className="jira-people-row"><span className="jira-info-label">Watchers</span><span className="task-value-inline">{task.watchers || 0}</span></div>
           </div>
         </aside>
         {/* Right Main Panel */}

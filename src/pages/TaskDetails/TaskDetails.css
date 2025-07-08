@@ -571,6 +571,9 @@ body, #root, .jira-fullpage-bg {
   border-radius: 4px;
   border: 1.5px solid #b6bac8;
 }
+.task-value-inline {
+  color: #f7f8f8;
+}
 .attachment-item-card .attachment-icon {
   font-size: 1.5rem;
   color: #6b778c;

@@ -26,7 +26,7 @@ const LogoSVG = ({ onClick }) => (
     fill="none" 
     xmlns="http://www.w3.org/2000/svg"
     onClick={onClick}
-    style={{ cursor: "pointer" }}  // So it looks clickable
+    style={{ cursor: "pointer" }}
   >
     <circle cx="19" cy="19" r="19" fill="url(#paint0_linear)"/>
     <path d="M12 26L26 12" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"/>
@@ -40,6 +40,35 @@ const LogoSVG = ({ onClick }) => (
   </svg>
 );
 
+const SaveSVG = ({ onClick }) => (
+  <svg 
+    width="20" 
+    height="20" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    onClick={onClick}
+    style={{ cursor: "pointer", marginLeft: "8px" }}
+  >
+    <path d="M5 12L10 17L20 7" stroke="#4f8cff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const EditSVG = ({ onClick }) => (
+  <svg 
+    width="18" 
+    height="18" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    onClick={onClick}
+    style={{ cursor: "pointer", marginLeft: "8px" }}
+  >
+    <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="#a0aec0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M18.5 2.5C18.8978 2.10217 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10217 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10217 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="#a0aec0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
 const ShowProject = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
@@ -50,8 +79,9 @@ const ShowProject = () => {
   const [search, setSearch] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectedRole, setSelectedRole] = useState("member");
-  const [teamMembers, setTeamMembers] = useState([]); //assignedUsers
-  // Remove all editingMetaField, metaDraft, metaLoading, startMetaEdit, cancelMetaEdit, handleMetaChange, saveMetaField, handleMetaKeyDown, and all related logic.
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [editingField, setEditingField] = useState(null);
+  const [tempValue, setTempValue] = useState("");
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -101,12 +131,10 @@ const ShowProject = () => {
         user_ids: selectedUsers,
         role: selectedRole,
       });
-      // Optionally, refresh team members
       const res = await API.get(`/projects/${id}`);
       setTeamMembers(res.data.project.assignedUsers);
     } catch (error) {
       console.error("Failed to invite users:", error);
-      // Optionally, show an error message to the user
     }
     setShowInviteModal(false);
     setSelectedUsers([]);
@@ -121,10 +149,41 @@ const ShowProject = () => {
 
   const goToTicketsDashboard = () => {
     navigate(`/projects/${id}/tasks`, {
-      state: { projectId: id, tasks: tasks },    });
+      state: { projectId: id, tasks: tasks },
+    });
   };
 
-  // Remove all editingMetaField, metaDraft, metaLoading, startMetaEdit, cancelMetaEdit, handleMetaChange, saveMetaField, handleMetaKeyDown, and all related logic.
+  const startEditing = (field, value) => {
+    setEditingField(field);
+    setTempValue(value);
+  };
+
+  const cancelEditing = () => {
+    setEditingField(null);
+    setTempValue("");
+  };
+
+  const handleSave = async () => {
+    if (!editingField || !project) return;
+
+    try {
+      const updatedProject = { ...project, [editingField]: tempValue };
+      await API.put(`/projects/${id}`, updatedProject);
+      setProject(updatedProject);
+      setEditingField(null);
+      setTempValue("");
+    } catch (error) {
+      console.error("Failed to update project:", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    setTempValue(e.target.value);
+  };
+
+  const handlePriorityChange = (e) => {
+    setTempValue(Number(e.target.value));
+  };
 
   if (!project) return <div className="premium-bg project-bg"><div className="project-glass-card loading">Loading...</div></div>;
 
@@ -140,34 +199,141 @@ const ShowProject = () => {
         {/* Header */}
         <div className="project-header-row">
           <div className="project-logo-title">
-          <LogoSVG onClick={() => navigate('/projects')} />
-                        <span className="project-title">{project.name}</span>
+            <LogoSVG onClick={() => navigate('/projects')} />
+            {editingField === 'name' ? (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <input
+                  type="text"
+                  value={tempValue}
+                  onChange={handleChange}
+                  className="edit-input"
+                  autoFocus
+                />
+                <SaveSVG onClick={handleSave} />
+                <LogoSVG onClick={cancelEditing} />
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span className="project-title">{project.name}</span>
+                <EditSVG onClick={() => startEditing('name', project.name)} />
+              </div>
+            )}
           </div>
           <div className="header-actions">
             <button onClick={goToTicketsDashboard} className="dashboard-btn premium-btn">Go to Tickets Dashboard</button>
             <button className="invite-btn premium-btn" onClick={openInviteModal}>+ Invite User</button>
           </div>
         </div>
-        <p className="project-description">{project.description}</p>
+        
+        {editingField === 'description' ? (
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+            <textarea
+              value={tempValue}
+              onChange={handleChange}
+              className="edit-textarea"
+              autoFocus
+            />
+            <SaveSVG onClick={handleSave} />
+            <LogoSVG onClick={cancelEditing} />
+          </div>
+        ) : (
+          <p className="project-description" onClick={() => startEditing('description', project.description)}>
+            {project.description}
+            <EditSVG onClick={() => startEditing('description', project.description)} />
+          </p>
+        )}
+        
         {/* Metadata */}
         <div className="details-grid">
           <div className="detail-card">
             <h4>Start Date</h4>
-            <p>{project.start_date}</p>
+            {editingField === 'start_date' ? (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <input
+                  type="date"
+                  value={tempValue}
+                  onChange={handleChange}
+                  className="edit-input"
+                  autoFocus
+                />
+                <SaveSVG onClick={handleSave} />
+                <LogoSVG onClick={cancelEditing} />
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <p onClick={() => startEditing('start_date', project.start_date)}>{project.start_date}</p>
+                <EditSVG onClick={() => startEditing('start_date', project.start_date)} />
+              </div>
+            )}
           </div>
           <div className="detail-card">
             <h4>End Date</h4>
-            <p>{project.end_date}</p>
+            {editingField === 'end_date' ? (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <input
+                  type="date"
+                  value={tempValue}
+                  onChange={handleChange}
+                  className="edit-input"
+                  autoFocus
+                />
+                <SaveSVG onClick={handleSave} />
+                <LogoSVG onClick={cancelEditing} />
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <p onClick={() => startEditing('end_date', project.end_date)}>{project.end_date}</p>
+                <EditSVG onClick={() => startEditing('end_date', project.end_date)} />
+              </div>
+            )}
           </div>
           <div className="detail-card">
             <h4>Priority</h4>
-            <p>{priorityLabel(project.priority)}</p>
+            {editingField === 'priority' ? (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <select
+                  value={tempValue}
+                  onChange={handlePriorityChange}
+                  className="edit-select"
+                  autoFocus
+                >
+                  {PRIORITY_OPTIONS.map(option => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+                <SaveSVG onClick={handleSave} />
+                <LogoSVG onClick={cancelEditing} />
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <p onClick={() => startEditing('priority', project.priority)}>{priorityLabel(project.priority)}</p>
+                <EditSVG onClick={() => startEditing('priority', project.priority)} />
+              </div>
+            )}
           </div>
           <div className="detail-card">
             <h4>Client</h4>
-            <p>{project.client_name}</p>
+            {editingField === 'client_name' ? (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <input
+                  type="text"
+                  value={tempValue}
+                  onChange={handleChange}
+                  className="edit-input"
+                  autoFocus
+                />
+                <SaveSVG onClick={handleSave} />
+                <LogoSVG onClick={cancelEditing} />
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <p onClick={() => startEditing('client_name', project.client_name)}>{project.client_name}</p>
+                <EditSVG onClick={() => startEditing('client_name', project.client_name)} />
+              </div>
+            )}
           </div>
         </div>
+        
         {/* Quick Stats */}
         <div className="stats-section">
           <div className="stat-box">
@@ -183,10 +349,12 @@ const ShowProject = () => {
             <p>{project.inProgressTasks}</p>
           </div>
           <div className="stat-box">
-            <h4>Reviwe</h4>
+            <h4>Review</h4>
             <p>{project.reviewTasks}</p>
           </div>
         </div>
+        
+        {/* Rest of your component remains the same */}
         {/* Team Members */}
         <div className="members-section">
           <div className="member-label-row">
@@ -213,6 +381,7 @@ const ShowProject = () => {
             )}
           </div>
         </div>
+        
         {/* Progress Bar */}
         <div className="progress-section">
           <div className="progress-label">Progress</div>
@@ -222,6 +391,7 @@ const ShowProject = () => {
             </div>
           </div>
         </div>
+        
         {/* Milestones */}
         <div className="milestones-section">
           <h4 className="section-header"><span title="Upcoming Milestones">📌</span> Upcoming Milestones</h4>
@@ -231,6 +401,7 @@ const ShowProject = () => {
             <li title="UAT Testing">🔹 UAT Testing - Due July 1</li>
           </ul>
         </div>
+        
         {/* Activity Feed */}
         <div className="activity-feed">
           <h4 className="section-header"><span title="Recent Activity">✅</span> Recent Activity</h4>
@@ -241,6 +412,7 @@ const ShowProject = () => {
           </ul>
         </div>
       </div>
+      
       {/* Team Modal */}
       {showTeamModal && (
         <div className="modal-overlay premium-modal-overlay" onClick={() => setShowTeamModal(false)}>
@@ -292,6 +464,7 @@ const ShowProject = () => {
           </div>
         </div>
       )}
+      
       {/* Invite User Modal */}
       {showInviteModal && (
         <div className="modal-overlay premium-modal-overlay" onClick={() => setShowInviteModal(false)}>
@@ -372,6 +545,7 @@ const ShowProject = () => {
           </div>
         </div>
       )}
+      
       {/* Footer */}
       <footer className="premium-footer-bar project-footer">
         © 2025 Ticket Board &nbsp;|&nbsp; <a href="#">Terms</a> &nbsp;|&nbsp; <a href="#">Privacy Policy</a>
@@ -381,4 +555,3 @@ const ShowProject = () => {
 };
 
 export default ShowProject;
-
