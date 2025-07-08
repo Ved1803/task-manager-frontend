@@ -3,6 +3,20 @@ import { useEffect, useState } from "react";
 import API from "../../services/api"; // adjust path as needed
 import "./ShowProject.css";
 
+const PRIORITY_OPTIONS = [
+  { label: "Low", value: 1 },
+  { label: "Medium", value: 0 },
+  { label: "High", value: 2 },
+];
+
+function priorityLabel(val) {
+  if (typeof val === "string") {
+    // Capitalize first letter
+    return val.charAt(0).toUpperCase() + val.slice(1);
+  }
+  const found = PRIORITY_OPTIONS.find((o) => o.value === Number(val));
+  return found ? found.label : val;
+}
 
 const LogoSVG = ({ onClick }) => (
   <svg 
@@ -37,6 +51,7 @@ const ShowProject = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectedRole, setSelectedRole] = useState("member");
   const [teamMembers, setTeamMembers] = useState([]); //assignedUsers
+  // Remove all editingMetaField, metaDraft, metaLoading, startMetaEdit, cancelMetaEdit, handleMetaChange, saveMetaField, handleMetaKeyDown, and all related logic.
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -109,6 +124,8 @@ const ShowProject = () => {
       state: { projectId: id, tasks: tasks },    });
   };
 
+  // Remove all editingMetaField, metaDraft, metaLoading, startMetaEdit, cancelMetaEdit, handleMetaChange, saveMetaField, handleMetaKeyDown, and all related logic.
+
   if (!project) return <div className="premium-bg project-bg"><div className="project-glass-card loading">Loading...</div></div>;
 
   // Progress calculation (placeholder)
@@ -142,10 +159,9 @@ const ShowProject = () => {
             <h4>End Date</h4>
             <p>{project.end_date}</p>
           </div>
-
           <div className="detail-card">
             <h4>Priority</h4>
-            <p>{project.priority}</p>
+            <p>{priorityLabel(project.priority)}</p>
           </div>
           <div className="detail-card">
             <h4>Client</h4>
@@ -365,3 +381,4 @@ const ShowProject = () => {
 };
 
 export default ShowProject;
+
