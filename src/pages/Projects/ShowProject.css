@@ -329,17 +329,26 @@ body, .premium-bg.project-bg {
 }
 
 .premium-modal-content {
-  background: rgba(255,255,255,0.95);
+  padding: 2vh;
+  background: rgba(30,32,48,0.98); /* dark glassy for contrast */
   border-radius: 1.5rem;
   box-shadow: 0 8px 32px rgba(60, 72, 100, 0.18), 0 1.5px 8px 0 rgba(79,140,255,0.08) inset;
   max-width: 600px;
   width: 90vw;
-  max-height: 85vh;
+  height: 17vh;
+  max-height: 100vh;
   overflow: hidden;
   position: relative;
   animation: modalPopIn 0.33s cubic-bezier(.4,2,.3,1);
   display: flex;
-  flex-direction: column;
+    flex-direction: column;
+}
+.premium-modal-content h3 {
+  color: #fff !important;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .modal-header {

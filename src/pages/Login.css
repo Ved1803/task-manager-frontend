@@ -6,17 +6,17 @@ body, .login-bg {
   font-family: 'Inter', Arial, Helvetica, sans-serif;
   background: linear-gradient(120deg, #4f8cff 0%, #7f9cf5 100%);
   display: flex;
-  align-items: center;
-  justify-content: center;
+    align-items: center;
+    justify-content: center;
   position: relative;
 }
 
 .login-bg.premium-bg {
   width: 100vw;
   height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   position: relative;
   overflow: hidden;
 }

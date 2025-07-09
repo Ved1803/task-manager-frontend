@@ -96,19 +96,19 @@ const TaskTable = () => {
   const DesktopTable = () => (
     <div className="table-container">
       <table className="task-table">
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Key</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Status</th>
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Key</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Status</th>
             <th>Priority</th>
             <th>Assignee</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks?.map((task, index) => (
+        </tr>
+      </thead>
+      <tbody>
+        {tasks?.map((task, index) => (
             <tr key={task.id} className="task-row">
               <td className="task-number">{index + 1}</td>
               <td className="task-key">TASK-{task.id}</td>
@@ -116,14 +116,14 @@ const TaskTable = () => {
                 <Link to={`/tasks/${task.id}`} className="task-link">
                   {task.title}
                 </Link>
-              </td>
+            </td>
               <td className="task-description">
-                {task.description
+              {task.description
                   ? task.description.length > 100
                     ? `${task.description.substring(0, 100)}...`
                     : task.description
-                  : "--"}
-              </td>
+                : "--"}
+            </td>
               <td className="task-status">
                 <span 
                   className="status-badge"
@@ -155,11 +155,11 @@ const TaskTable = () => {
                 ) : (
                   <span className="unassigned">Unassigned</span>
                 )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
     </div>
   );
 

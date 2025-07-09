@@ -15,7 +15,7 @@ import TaskDetails from "./pages/TaskDetails/TaskDetails";
 import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UpdateUser from "./pages/users/UpdateUser";
-import Projects from "./pages/Projects/projects";
+import Projects from "./pages/Projects/Projects";
 import CreateProjectForm from "./pages/Projects/CreateProjectForm";
 import ShowProject from "./pages/Projects/ShowProject";
 import TaskForm from "./components/task/TaskForm";

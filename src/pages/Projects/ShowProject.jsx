@@ -9,12 +9,29 @@ const PRIORITY_OPTIONS = [
   { label: "High", value: 2 },
 ];
 
+const STATUS_OPTIONS = [
+  { label: "Active", value: 0 },
+  { label: "planned", value: 1 },
+  { label: "On Hold", value: 2 },
+  { label: "Completed", value: 3 },
+  { label: "Cancelled", value: 4 },
+  { label: "Archived", value: 5 },
+];
+
 function priorityLabel(val) {
   if (typeof val === "string") {
     // Capitalize first letter
     return val.charAt(0).toUpperCase() + val.slice(1);
   }
   const found = PRIORITY_OPTIONS.find((o) => o.value === Number(val));
+  return found ? found.label : val;
+}
+
+function statusLabel(val) {
+  if (typeof val === "string") {
+    return val.charAt(0).toUpperCase() + val.slice(1);
+  }
+  const found = STATUS_OPTIONS.find((o) => o.value === Number(val));
   return found ? found.label : val;
 }
 
@@ -82,6 +99,8 @@ const ShowProject = () => {
   const [teamMembers, setTeamMembers] = useState([]);
   const [editingField, setEditingField] = useState(null);
   const [tempValue, setTempValue] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState(null);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -116,6 +135,17 @@ const ShowProject = () => {
       ]);
     }
     setShowInviteModal(true);
+  };
+ 
+  const handleDeleteProject = async (id) => {
+    const confirmed = window.confirm("Are you sure you want to delete this project?");
+    if (!confirmed) return;
+    try {
+      await API.delete(`/projects/${id}`);
+      navigate("/projects");
+    } catch (error) {
+      console.error("Failed to delete project:", error);
+    } 
   };
 
   const handleUserSelect = (id) => {
@@ -185,10 +215,37 @@ const ShowProject = () => {
     setTempValue(Number(e.target.value));
   };
 
+  const handleStatusChange = (e) => {
+    setTempValue(Number(e.target.value));
+  };
+
   if (!project) return <div className="premium-bg project-bg"><div className="project-glass-card loading">Loading...</div></div>;
 
   // Progress calculation (placeholder)
   const progress = 30;
+
+  const openDeleteConfirm = (project) => {
+    setProjectToDelete(project);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirmed = async () => {
+    try {
+      await API.delete(`/projects/${projectToDelete.id}`);
+      setShowDeleteConfirm(false);
+      setProjectToDelete(null);
+      navigate("/projects");
+    } catch (error) {
+      console.error("Failed to delete project:", error);
+      setShowDeleteConfirm(false);
+      setProjectToDelete(null);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
+    setProjectToDelete(null);
+  };
 
   return (
     <div className="premium-bg project-bg">
@@ -221,7 +278,7 @@ const ShowProject = () => {
           </div>
           <div className="header-actions">
             <button onClick={goToTicketsDashboard} className="dashboard-btn premium-btn">Go to Tickets Dashboard</button>
-            <button className="invite-btn premium-btn" onClick={openInviteModal}>+ Invite User</button>
+            <button className="invite-btn premium-btn" onClick={openInviteModal}>Invite User</button>
           </div>
         </div>
         
@@ -256,8 +313,8 @@ const ShowProject = () => {
                   className="edit-input"
                   autoFocus
                 />
-                <SaveSVG onClick={handleSave} />
-                <LogoSVG onClick={cancelEditing} />
+                <button onClick={handleSave}>☑️</button>
+                <button onClick={cancelEditing}>❌</button>
               </div>
             ) : (
               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -277,8 +334,8 @@ const ShowProject = () => {
                   className="edit-input"
                   autoFocus
                 />
-                <SaveSVG onClick={handleSave} />
-                <LogoSVG onClick={cancelEditing} />
+                <button onClick={handleSave}>☑️</button>
+                <button onClick={cancelEditing}>❌</button>
               </div>
             ) : (
               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -308,6 +365,30 @@ const ShowProject = () => {
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <p onClick={() => startEditing('priority', project.priority)}>{priorityLabel(project.priority)}</p>
                 <EditSVG onClick={() => startEditing('priority', project.priority)} />
+              </div>
+            )}
+          </div>
+          <div className="detail-card">
+            <h4>Status</h4>
+            {editingField === 'status' ? (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <select
+                  value={tempValue}
+                  onChange={handleStatusChange}
+                  className="edit-select"
+                  autoFocus
+                >
+                  {STATUS_OPTIONS.map(option => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+                <SaveSVG onClick={handleSave} />
+                <LogoSVG onClick={cancelEditing} />
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <p onClick={() => startEditing('status', project.status)}>{project.status}</p>
+                <EditSVG onClick={() => startEditing('status', project.status)} />
               </div>
             )}
           </div>
@@ -548,8 +629,20 @@ const ShowProject = () => {
       
       {/* Footer */}
       <footer className="premium-footer-bar project-footer">
-        © 2025 Ticket Board &nbsp;|&nbsp; <a href="#">Terms</a> &nbsp;|&nbsp; <a href="#">Privacy Policy</a>
+        © 2025 Ticket Board &nbsp;|&nbsp; <a href="#">Terms</a> &nbsp;|&nbsp; <a href="#">Privacy Policy</a>| <span className="pointer" onClick={() => openDeleteConfirm(project)}>Delete this project</span>
       </footer>
+
+      {showDeleteConfirm && (
+        <div className="modal-overlay premium-modal-overlay">
+          <div className="modal-content premium-modal-content" style={{textAlign:'center'}}>
+            <h3 style={{color:'#fff', fontWeight:800, fontSize:'1.35rem', marginBottom:'1.5rem'}}>Are you sure you want to delete this project?</h3>
+            <div style={{marginTop: '1.5rem', display: 'flex', gap: '1rem', justifyContent: 'center'}}>
+              <button className="premium-btn" style={{background:'#ff6384',color:'#fff'}} onClick={handleDeleteConfirmed}>Yes, Delete</button>
+              <button className="modal-btn-secondary" onClick={handleDeleteCancel}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
