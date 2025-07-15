@@ -1,7 +1,8 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../../services/api"; // adjust path as needed
 import "./ShowProject.css";
+import MilestonesSection from "../../components/milestones/MilestonesSection";
 
 const PRIORITY_OPTIONS = [
   { label: "Low", value: 1 },
@@ -17,6 +18,26 @@ const STATUS_OPTIONS = [
   { label: "Cancelled", value: 4 },
   { label: "Archived", value: 5 },
 ];
+
+const STATUS_LABELS = {
+  pending: { label: "Pending", color: "#f59e0b" },
+  in_progress: { label: "In Progress", color: "#4f8cff" },
+  completed: { label: "Completed", color: "#10b981" },
+};
+function statusBadge(status) {
+  const info = STATUS_LABELS[status] || { label: status, color: "#888" };
+  return (
+    <span style={{
+      background: info.color,
+      color: "#fff",
+      borderRadius: 8,
+      padding: "2px 10px",
+      fontWeight: 600,
+      fontSize: 13,
+      marginLeft: 8,
+    }}>{info.label}</span>
+  );
+}
 
 function priorityLabel(val) {
   if (typeof val === "string") {
@@ -101,6 +122,7 @@ const ShowProject = () => {
   const [tempValue, setTempValue] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState(null);
+  const [upcomingMilestones, setUpcomingMilestones] = useState([]);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -117,6 +139,18 @@ const ShowProject = () => {
     };
 
     fetchProject();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchUpcomingMilestones = async () => {
+      try {
+        const res = await API.get(`/projects/${id}/milestones/upcomming`);
+        setUpcomingMilestones(Array.isArray(res.data) ? res.data.slice(0, 3) : []);
+      } catch (err) {
+        setUpcomingMilestones([]);
+      }
+    };
+    fetchUpcomingMilestones();
   }, [id]);
 
   const openInviteModal = async () => {
@@ -435,51 +469,23 @@ const ShowProject = () => {
           </div>
         </div>
         
-        {/* Rest of your component remains the same */}
-        {/* Team Members */}
-        <div className="members-section">
-          <div className="member-label-row">
-            <h4 className="member-label">Team Members</h4>
-            <button className="team-modal-btn" onClick={() => setShowTeamModal(true)} title="View all team members">👥</button>
+        {/* Upcoming Milestones Preview */}
+        <div style={{ margin: "2.5rem 0 1.5rem 0" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+            <h4 className="section-header" style={{ fontWeight: 700, fontSize: 18, margin: 0 }}><span title="Upcoming Milestones">📌</span> Upcoming Milestones</h4>
+            <Link to={`/projects/${id}/milestones`} style={{ background: "#4f8cff", color: "#fff", borderRadius: 8, padding: "6px 16px", fontWeight: 600, textDecoration: "none", fontSize: 14 }}>Manage Milestones</Link>
           </div>
-          <div className="avatars">
-            {teamMembers.slice(0, 5).map((member) => (
-              <img
-                key={member.id}
-                src={member.avatar_url || `https://i.pravatar.cc/40?img=${member.id+10}`}
-                alt={member.name}
-                className="avatar"
-                title={member.name}
-                onClick={() => setShowTeamModal(true)}
-                tabIndex={0}
-                style={{ transition: 'transform 0.15s' }}
-              />
-            ))}
-            {teamMembers.length > 5 && (
-              <span className="total-users" onClick={() => setShowTeamModal(true)} tabIndex={0}>
-                +{teamMembers.length - 5} more
-              </span>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+            {upcomingMilestones.length === 0 ? (
+              <li style={{ color: "#fff", fontSize: 15 }}>No upcoming milestones.</li>
+            ) : (
+              upcomingMilestones.map(m => (
+                <li key={m.id} style={{ fontSize: 15, color: "#23273a", marginBottom: 6, display: "flex", alignItems: "center" }}>
+                  <span style={{ color: "#fff", fontWeight: 600 }}>{m.title}</span>
+                  <span style={{ color: "#fff", marginLeft: 10, fontSize: 13 }}>({m.due_date})</span>
+                </li>
+              ))
             )}
-          </div>
-        </div>
-        
-        {/* Progress Bar */}
-        <div className="progress-section">
-          <div className="progress-label">Progress</div>
-          <div className="progress-bar premium-progress-bar">
-            <div className="progress-bar-fill premium-progress-bar-fill" style={{ width: `${progress}%` }}>
-              <span className="progress-percent">{progress}%</span>
-            </div>
-          </div>
-        </div>
-        
-        {/* Milestones */}
-        <div className="milestones-section">
-          <h4 className="section-header"><span title="Upcoming Milestones">📌</span> Upcoming Milestones</h4>
-          <ul className="milestone-list">
-            <li title="UI Wireframes">🔹 UI Wireframes - Due May 20</li>
-            <li title="Backend Integration">🔹 Backend Integration - Due June 5</li>
-            <li title="UAT Testing">🔹 UAT Testing - Due July 1</li>
           </ul>
         </div>
         

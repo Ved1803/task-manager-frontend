@@ -335,7 +335,7 @@ body, .premium-bg.project-bg {
   box-shadow: 0 8px 32px rgba(60, 72, 100, 0.18), 0 1.5px 8px 0 rgba(79,140,255,0.08) inset;
   max-width: 600px;
   width: 90vw;
-  height: 17vh;
+  /* height: 17vh; */
   max-height: 100vh;
   overflow: hidden;
   position: relative;

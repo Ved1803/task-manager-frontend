@@ -20,6 +20,7 @@ import CreateProjectForm from "./pages/Projects/CreateProjectForm";
 import ShowProject from "./pages/Projects/ShowProject";
 import TaskForm from "./components/task/TaskForm";
 import Tasks from "./pages/TaskDetails/Tasks";
+import ProjectMilestonesPage from "./pages/Projects/ProjectMilestonesPage";
 
 function App() {
   const token = useSelector((state) => state.auth.token);
@@ -39,6 +40,7 @@ function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/projects/new" element={<CreateProjectForm />} />
           <Route path="/projects/:id" element={<ShowProject />} />
+          <Route path="/projects/:id/milestones" element={<ProjectMilestonesPage />} />
           <Route path="/projects/:id/tasks" element={<Tasks />} />
           <Route path="/projects/:id/tasks/new" element={<TaskForm />} />
           <Route path="/tasks/:id" element={<TaskDetails />} />
